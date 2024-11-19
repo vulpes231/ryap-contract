@@ -1,0 +1,12 @@
+{
+  "name": "ryancontract",
+  "module": "index.ts",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "bun-types": "latest"
+  },
+  "type": "module",
+  "dependencies": {
+    "hardhat": "^2.22.15"
+  }
+}
