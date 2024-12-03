@@ -4,3 +4,11 @@ bun hardhat ignition deploy ./ignition/modules/Yarntoken.js --network bsctest
 BSCTEST V1
 
 0x538a5c608658d1DB341c937Af67Ca85e01801610
+
+v2
+
+YarntokenModule#Yarntoken - 0x62f47FDB32D38B8A135363808E2Fc16406d0fa74
+
+v3
+
+YarntokenModule#Yarntoken - 0x71502fB48D9CfcBBf10336e8AEd9AA49AF0791c2
